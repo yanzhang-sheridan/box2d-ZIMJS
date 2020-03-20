@@ -1,0 +1,328 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Box2D</title>
+
+<!-- Welcome to ZIM at https://zimjs.com - Code Creativity!                              -->
+<!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS https://createjs.com -->
+<!-- Founded by Inventor Dan Zen - http://danzen.com - Canadian New Media Award Winner   -->
+<!-- ZIM is free to use. You can donate to help improve ZIM at https://zimjs.com/donate  -->
+
+<script src="https://zimjs.org/cdn/1.2.3/createjs_min.js"></script>
+<script src="https://zimjs.org/cdn/10.7.1/zim.js"></script>
+<!-- use zimjs.com/distill for minified individual functions! -->
+
+<!-- import Box2D and ZIM Physics helper -->
+<script src="https://zimjs.org/cdn/Box2dWeb-2.1.a.3.min.js"></script>
+<script src="https://zimjs.org/cdn/physics_2.0.js"></script>
+
+<script src="https://zimjs.org/cdn/game_2.2.js"></script>
+
+
+
+<script>
+
+// SCALING OPTIONS
+// scaling can have values as follows with full being the default
+// "fit"	sets canvas and stage to dimensions and scales to fit inside window size
+// "outside"	sets canvas and stage to dimensions and scales to fit outside window size
+// "full"	sets stage to window size with no scaling
+// "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
+
+const scaling = "fit"; // this will resize to fit inside the screen dimensions
+const width = 1024;
+const height = 768;
+const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
+const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
+
+const path = "assets/";
+const assets = ["1.png","2.png","3.png","4.png","11.png","22.png","33.png","44.png","2818573.jpg","ball.png","girl.png","bgm.mp3"];
+
+const frame = new Frame("fit", 1024, 768, dark, light, assets, path, new Waiter({backgroundColor:black}));
+
+frame.on("ready", () => { // ES6 Arrow Function - like function(){}
+    zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+
+    // see https://zimjs.com/learn.html for video and code tutorials
+    // see https://zimjs.com/docs.html for documentation
+    // see https://zimjs.com/bits.html for 64 Interactive Media techniques
+
+    // put your code here (you can delete this sample code)
+var bgm = asset("bgm.mp3");
+var background = frame.asset("2818573.jpg").centerReg().sca(.4);
+
+const physics = new Physics(0);
+// const physics = new Physics({borders:new Boundary(0,-stageH,stageW,stageH*2)});
+
+
+
+const bowlings = new Container(stageW, stageH).addTo();
+const force = 10;
+
+
+
+// const kuang = new Container(stageW, stageH).addTo();
+const size = 300;
+const thickness = 30;
+const damping = 1;
+
+// const rightBar = new Rectangle(thickness, size, white).centerReg(kuang).mov((size-thickness)/3-12, -42).rot(-30)
+//     .addPhysics({linear:damping});
+// const botBar = new Rectangle(size, thickness, white).centerReg(kuang).mov(0, (size-thickness)/3)
+//     .addPhysics({linear:damping});
+// const leftBar = new Rectangle(thickness, size, white).centerReg(kuang).mov(-(size-thickness)/3+12, -42).rot(30)
+//     .addPhysics({linear:damping});
+//
+// timeout(5000, function(){
+//     rightBar.removePhysics();
+//     botBar.removePhysics();
+//     leftBar.removePhysics();
+//     kuang.removeFrom();
+// });
+
+// physics.join(rightBar, botBar);
+// physics.join(botBar, leftBar);
+// physics.join(leftBar, rightBar);
+
+
+const target = frame.asset("girl.png").centerReg().sca(.4).mov(-440,270).addPhysics();
+    var min = 250;
+   var max = 450;
+
+
+   // target.on("mousedown", function (e) {
+   //      var force = rand(min, max);
+   //      let upForce = (e.stageY-target.y)*force/150;
+   //      // x and y force plus where to apply force
+   //  	target.impulse(upForce, -300, e.stageX, e.stageY);
+   //  });
+   physics.drag([target]);
+
+// var holes = new Container(stageW, stageH).addTo();
+// var hole1 = new Circle().center().loc(0, stageH).addTo(holes);
+// var hole2 = new Circle().center().loc(0, 0).addTo(holes);
+// var hole3 = new Circle().center().loc(stageW, 0).addTo(holes);
+// var hole4 = new Circle().center().loc(stageW, stageH).addTo(holes);
+// var hole4 = new Circle().center().loc(stageW/2, 0).addTo(holes);
+// var hole4 = new Circle().center().loc(stageW/2, stageH).addTo(holes);
+
+// var circle = new Circle();
+// var holes = new Tile(circle, 3, 2, stageW/3+70,stageH/2+150).center();
+//
+// holes.loop( hole => {
+//     hole.addPhysics(false);
+// });
+
+var route = new Squiggle({points:
+[[334.4,-332.4,0,0,-0.2,-21.1,0.2,21.1,"straight"],[335.2,17.4,0,0,0.5,-25.4,-0.5,25.4],[336.3,459.3,0,0,0.5,-24,-6.9,20.7,"free"]]})
+    .center().mov(100,0).alp(0);
+
+var route2 = route.clone().center().mov(200,0).alp(0);
+var route3 = route.clone().center().mov(300,0).alp(0);
+
+    var circle = new Circle(20).center().animate({
+            props:{path:route, orient:false},
+            // drag:true,
+            ease:"linear",
+            time:15000,
+            loop:true,
+            rewind:true,
+            // rewindCall:function () {
+            //     // blackHeart.alp(blackHeart.alpha+.2);
+            //     blackHeart.alpha += .2;
+            // }
+        }).alp(0);
+
+    var circle2 = new Circle(15).center().animate({
+            props:{path:route2, orient:false},
+            // drag:true,
+            ease:"linear",
+            time:12000,
+            loop:true,
+            rewind:true,
+            // rewindCall:function () {
+            //     // blackHeart.alp(blackHeart.alpha+.2);
+            //     blackHeart.alpha += .2;
+            // }
+        }).alp(0);
+
+    var circle3 = new Circle(10).center().animate({
+            props:{path:route3, orient:false},
+            // drag:true,
+            ease:"linear",
+            time:9000,
+            loop:true,
+            rewind:true,
+            // rewindCall:function () {
+            //     // blackHeart.alp(blackHeart.alpha+.2);
+            //     blackHeart.alpha += .2;
+            // }
+        }).alp(0);
+
+var holes = new Container(stageW, stageH).addTo();
+
+let hole1 = frame.asset("11.png").centerReg().sca(.8).addPhysics({shape:"circle", angular:1, restitution:1.2}).addTo(holes);
+hole1.hole=true;
+let hole2 = frame.asset("22.png").centerReg().sca(.6).addPhysics({shape:"circle", angular:1, restitution:1.2}).addTo(holes);
+hole2.hole=true;
+let hole3 = frame.asset("33.png").centerReg().sca(.4).addPhysics({shape:"circle", angular:1, restitution:1.2}).addTo(holes);
+hole3.hole=true;
+
+
+Ticker.add(function(){
+    hole1.body.x=circle.x;
+    hole1.body.y = circle.y;
+    hole2.body.x=circle2.x;
+    hole2.body.y = circle2.y;
+    hole3.body.x=circle3.x;
+    hole3.body.y = circle3.y;
+});
+
+let boxer1 = frame.asset("1.png").centerReg().loc(300,350).addPhysics({shape:"circle", angular:1, restitution:1.2});
+boxer1.gameType = "disappear";
+let boxer2 = frame.asset("2.png").centerReg().loc(600, 530).addPhysics({shape:"circle", angular:1, restitution:1.2});
+boxer2.gameType = "clear";
+let boxer3 = frame.asset("3.png").centerReg().loc(650, 200).addPhysics({shape:"circle", angular:1, restitution:1.2});
+boxer3.gameType = "slow";
+
+var count = 0;
+var scoreLabel = new Label({
+              text:0,
+              color:white,
+              size:40,
+              align:"left",
+          }).center().mov(-470,-340);
+
+
+
+loop(5, () => {
+    let ball = new Circle(25,["#fca59f","orange","#bebdff"]).center().mov(-255,300).addPhysics({shape:"circle", angular:1, restitution:1.2}).addTo(bowlings)
+    .contact((obj) => {
+        if (obj.hole) {
+            ball.removePhysics();
+            ball.removeFrom();
+            if(obj.scale==.8){
+                count+=50;
+
+            }else if(obj.scale == .6){
+                count += 100;
+            }else {
+                count += 200;
+            }
+            scoreLabel.text = count;
+        }
+
+        if(obj.gameType=="disappear"){
+            ball.alpha -= 1;
+            timeout(1500, () => {
+                ball.alpha += 1;
+            });
+        }
+
+        if(obj.gameType=="clear"){
+            ball.alpha -= 0.2;
+            if(ball.alpha==0)	{
+                ball.removePhysics();
+                ball.removeFrom();
+            }
+        }
+
+        if(obj.gameType=="slow"){
+            ball.body.SetLinearDamping(3)
+        }
+
+
+        // if (hole2.hole) {
+        //     ball.removePhysics();
+        //     ball.removeFrom();
+        //     count+=100;
+        //     scoreLabel.text = count;
+        // }
+    //     if (hole3.hole) {
+    //         ball.removePhysics();
+    //         ball.removeFrom();
+    //         count+=200;
+    //         scoreLabel.text = count;
+    //     }
+    // });
+    });
+});
+
+
+
+
+
+
+var intro = new Container().addTo();
+
+
+
+var backing = new Rectangle(stageW, stageH, pink)
+    .addTo(intro)
+    .linearGradient(["#00ddff", "#005582"], [0, 1], 0,0,0, stageH);
+
+    var title = new Label({
+        text:"Feed Ghosts",
+        size:80,
+        font:"impact",
+        color:white,
+        backgroundColor:"grey",
+        shiftVertical:4
+    }).pos(0,100,CENTER,TOP).ske(6).addTo(intro);
+
+new Label({
+    text:"Feed ghosts with candies! \n You can drag the girl to kick the candies! \n Watch out the pumpkins!",
+    // labelWidth:200,
+    lineHeight:55,
+    align:"center",
+    size:45,
+    color:white,
+    // fontOptions:""
+}).center(intro).sha("rgba(0,0,0,.2)",3,3,0);
+
+new Button({
+    // backing:pizzazz.makeIcon("heart", purple, 3),
+    // rollBacking:pizzazz.makeIcon("heart", red, 3),
+    label:"Start",
+    color:white,
+    rollColor:"white",
+    backgroundColor:"grey",
+    rollBackgroundColor:"grey"
+})
+    .sca(1)
+    .centerReg(intro)
+    // property, start, min, max, minTime, maxTime
+    .wiggle("rotation",0,2,5,300,1000)
+    .wiggle("scale",1,.1,.2,2000,3000)
+    .pos(0,180,CENTER,BOTTOM)
+    .tap(function(){
+        intro
+            .cache()
+            .animate({y:-stageH},1300);
+        bgm.play();
+        stage.update();
+
+    });
+
+
+
+    stage.update(); // this is needed to show any changes
+
+}); // end of ready
+
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>
